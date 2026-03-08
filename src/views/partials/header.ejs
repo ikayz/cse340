@@ -12,10 +12,20 @@
 
 <body>
   <nav>
-    <ul>
-      <li><a href="/" class="<%= title === 'Home' ? 'active' : '' %>">Home</a></li>
-      <li><a href="/organizations" class="<%= title === 'Organizations' ? 'active' : '' %>">Organizations</a></li>
-      <li><a href="/projects" class="<%= title === 'Projects' ? 'active' : '' %>">Projects</a></li>
-      <li><a href="/categories" class="<%= title === 'Categories' ? 'active' : '' %>">Categories</a></li>
-    </ul>
+    <div class="nav-container">
+      <a href="/" class="logo">
+        <img src="/images/cse340-service-network.png" alt="Service Network Logo">
+      </a>
+      <ul class="nav-links">
+        <li><a href="/" class="<%= path === '/' ? 'active' : '' %>">Home</a></li>
+        <li><a href="/organizations" class="<%= path === '/organizations' ? 'active' : '' %>">Organizations</a></li>
+        <li><a href="/projects" class="<%= path === '/projects' ? 'active' : '' %>">Projects</a></li>
+        <li><a href="/categories" class="<%= path === '/categories' ? 'active' : '' %>">Categories</a></li>
+      </ul>
+      <button class="hamburger">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+    </div>
   </nav>

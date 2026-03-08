@@ -33,22 +33,22 @@ setDefaultAutoSelectFamily;
  */
 app.get('/', async (req, res) => {
   const title = 'Home';
-  res.render('home', { title });
+  res.render('home', { title, path: '/' });
 });
 
 app.get('/organizations', async (req, res) => {
   const title = 'Our Partner Organizations';
-  res.render('organizations', { title });
+  res.render('organizations', { title, path: '/organizations' });
 });
 
 app.get('/projects', async (req, res) => {
   const title = 'Service Projects';
-  res.render('projects', { title });
+  res.render('projects', { title, path: '/projects' });
 });
 
 app.get('/categories', async (req, res) => {
   const title = 'Categories';
-  res.render('categories', { title });
+  res.render('categories', { title, path: '/categories' });
 });
 
 app.listen(PORT, () => {
