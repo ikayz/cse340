@@ -8,13 +8,18 @@
     <div class="card-container">
       <% projects.forEach(project=> { %>
         <div class="card">
-          <p>
-            <strong>
-              <%= new Date(project.project_date).toLocaleDateString('en-US', { year: 'numeric' , month: 'long' ,
-                day: 'numeric' }) %>
-            </strong>:
-            <%= project.title %> (<%= project.organization_name %>)
-          </p>
+          <div class="card-content">
+            <p>
+              <strong>
+                <%= new Date(project.project_date).toLocaleDateString('en-GB', { day: 'numeric' , month: 'long' ,
+                  year: 'numeric' }) %>
+              </strong>:
+              <%= project.title %> (<%= project.organization_name %>)
+            </p>
+          </div>
+          <div class="card-logo">
+            <img src="/images/<%= project.logo_filename %>" alt="<%= project.organization_name %> logo">
+          </div>
         </div>
         <% }) %>
     </div>

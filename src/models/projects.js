@@ -8,7 +8,8 @@ const getAllProjects = async () => {
       sp.description,
       sp.location,
       sp.project_date,
-      o.name AS organization_name
+      o.name AS organization_name,
+      o.logo_filename
     FROM service_projects sp
     JOIN organization o
       ON sp.organization_id = o.organization_id
