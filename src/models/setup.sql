@@ -15,6 +15,17 @@ CREATE TABLE service_projects (
     project_date DATE NOT NULL
 );
 
+CREATE TABLE categories (
+    category_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) UNIQUE NOT NULL
+);
+
+CREATE TABLE project_categories (
+    project_id INT NOT NULL REFERENCES service_projects(project_id) ON DELETE CASCADE,
+    category_id INT NOT NULL REFERENCES categories(category_id) ON DELETE CASCADE,
+    PRIMARY KEY (project_id, category_id)
+);
+
 INSERT INTO organization (name, description, contact_email, logo_filename)
 VALUES
     (
@@ -59,3 +70,25 @@ VALUES
 (3, 'Youth Mentorship Program', 'Pairing youth with professional mentors.', 'Copperbelt University', '2026-05-03'),
 (3, 'Disaster Relief Support', 'Providing aid to flood-affected families.', 'Chingola Township', '2026-05-10'),
 (3, 'Literacy Campaign', 'Teaching adults basic reading and writing.', 'Lusaka Community Hall', '2026-05-17');
+
+INSERT INTO project_categories (project_id, category_id) VALUES
+(16, 1), -- School Renovation → Education
+(17, 1), -- Community Housing Project → Education
+(18, 3), -- Water Well Construction → Health
+(19, 1), -- Library Setup → Education
+(20, 1); -- Playground Installation → Education
+
+INSERT INTO project_categories (project_id, category_id) VALUES
+(21, 2), -- Organic Farming Workshop → Environment
+(22, 2), -- Community Garden → Environment
+(23, 2), -- Seed Distribution Drive → Environment
+(24, 2), -- Irrigation System Setup → Environment
+(25, 2); -- Composting Training → Environment
+
+INSERT INTO project_categories (project_id, category_id) VALUES
+(26, 3), -- Health Screening Camp → Health
+(27, 3), -- Blood Donation Drive → Health
+(28, 1), -- Youth Mentorship Program → Education
+(29, 3), -- Disaster Relief Support → Health
+(30, 1); -- Literacy Campaign → Education
+
