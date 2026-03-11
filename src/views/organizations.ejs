@@ -6,21 +6,17 @@
     </h1>
     <p>Here are a few of our partner organizations:</p>
     <div class="card-container">
-      <div class="card">
-        <img src="/images/brightfuture-logo.png" alt="BrightFuture Builders logo">
-        <h3>BrightFuture Builders</h3>
-        <p>info@brightfuture.org</p>
-      </div>
-      <div class="card">
-        <img src="/images/greenharvest-logo.png" alt="GreenHarvest Growers logo">
-        <h3>GreenHarvest Growers</h3>
-        <p>contact@greenharvest.org</p>
-      </div>
-      <div class="card">
-        <img src="/images/unityserve-logo.png" alt="UnityServe Volunteers logo">
-        <h3>UnityServe Volunteers</h3>
-        <p>hello@unityserve.org</p>
-      </div>
+      <% organizations.forEach(organization=> { %>
+        <div class="card">
+          <img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo">
+          <h3>
+            <%= organization.name %>
+          </h3>
+          <p>
+            <%= organization.contact_email %>
+          </p>
+        </div>
+        <% }) %>
     </div>
   </main>
 
