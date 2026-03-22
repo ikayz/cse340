@@ -2,8 +2,8 @@ import {
   getAllOrganizations,
   getOrganizationDetails,
 } from '../models/organizations.js';
-import { getProjectsByOrganizationId } from '../models/projects.js';
-import { getAllCategories } from '../models/categories.js';
+import { getProjectsByOrganizationId, getProjectsByCategoryId } from '../models/projects.js';
+import { getAllCategories, getCategoryDetails } from '../models/categories.js';
 
 const showCategoriesPage = async (req, res) => {
   const categories = await getAllCategories();
@@ -25,5 +25,29 @@ const showOrganizationDetailsPage = async (req, res) => {
     path: req.path,
   });
 };
+const showCategoryDetailsPage = async (req, res, next) => {
+  try {
+    const categoryId = req.params.id;
+    const categoryDetails = await getCategoryDetails(categoryId);
+    
+    if (!categoryDetails) {
+      const err = new Error('Category Not Found');
+      err.status = 404;
+      return next(err);
+    }
+    
+    const projects = await getProjectsByCategoryId(categoryId);
+    const title = `${categoryDetails.name} Projects`;
 
-export { showCategoriesPage, showOrganizationDetailsPage };
+    res.render('category', {
+      title,
+      categoryDetails,
+      projects,
+      path: '/categories',
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { showCategoriesPage, showOrganizationDetailsPage, showCategoryDetailsPage };
