@@ -1,0 +1,29 @@
+<%- include('partials/header') %>
+  <main>
+    <div class="form-wrapper">
+      <div class="form-header">
+        <h1><%= title %></h1>
+        <p>Fill out the details below to add a new organization.</p>
+      </div>
+
+      <form action="/new-organization" method="POST" class="styled-form">
+        <div class="form-group">
+          <label for="name">Organization Name</label>
+          <input type="text" id="name" name="name" placeholder="e.g. Acme Corp" required />
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" name="description" placeholder="Briefly describe the organization..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="contactEmail">Contact Email</label>
+          <input type="email" id="contactEmail" name="contactEmail" placeholder="contact@example.com" required />
+        </div>
+
+        <button type="submit" class="btn-submit">Create Organization</button>
+      </form>
+    </div>
+  </main>
+<%- include('partials/footer') %>

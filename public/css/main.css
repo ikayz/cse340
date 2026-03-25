@@ -349,3 +349,89 @@ button:focus {
   color: var(--primary-color);
   text-decoration: none;
 }
+
+/* Form Wrapper for narrower forms inside main */
+.form-wrapper {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.form-wrapper .form-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.form-wrapper .form-header p {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.styled-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.styled-form label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--dark-gray);
+  font-size: 0.95rem;
+}
+
+.styled-form input,
+.styled-form textarea,
+.styled-form select {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  background-color: var(--light-gray);
+}
+
+.styled-form input:focus,
+.styled-form textarea:focus,
+.styled-form select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  background-color: var(--white);
+  box-shadow: 0 0 0 3px rgba(38, 84, 124, 0.15);
+}
+
+.styled-form textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.btn-submit {
+  display: inline-block;
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--primary-color);
+  color: var(--white);
+  font-weight: 700;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.btn-submit:hover,
+.btn-submit:focus {
+  background-color: var(--dark-gray);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(26, 60, 90, 0.2);
+  color: var(--white);
+  text-decoration: none;
+}
+
+.btn-submit:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(26, 60, 90, 0.2);
+}
