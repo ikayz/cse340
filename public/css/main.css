@@ -327,7 +327,9 @@ button:focus {
   border: 1px solid #ddd;
   border-left: 5px solid var(--primary-color);
   border-radius: 6px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   text-align: left; /* override center alignment */
 }
 
@@ -417,7 +419,10 @@ button:focus {
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   text-align: center;
   margin-top: 1rem;
 }
@@ -434,4 +439,31 @@ button:focus {
 .btn-submit:active {
   transform: translateY(0);
   box-shadow: 0 2px 6px rgba(26, 60, 90, 0.2);
+}
+/* Flash message styles */
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+.alert.success {
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}
+.alert.error {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+.alert.warning {
+  color: #856404;
+  background-color: #fff3cd;
+  border-color: #ffeeba;
+}
+.alert.info {
+  color: #0c5460;
+  background-color: #d1ecf1;
+  border-color: #bee5eb;
 }
