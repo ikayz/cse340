@@ -33,19 +33,23 @@ const showNewOrganizationForm = async (req, res) => {
 };
 
 const processNewOrganizationForm = async (req, res) => {
-  const { name, description, contactEmail } = req.body;
-  const logoFilename = 'placeholder-logo.png'; // Use the placeholder logo for all new organizations
+    // Check for validation errors
+    const results = validationResult(req);
+    if (!results.isEmpty()) {
+        // Validation failed - loop through errors
+        results.array().forEach((error) => {
+            req.flash('error', error.msg);
+        });
 
-  const organizationId = await createOrganization(
-    name,
-    description,
-    contactEmail,
-    logoFilename,
-  );
+        // Redirect back to the new organization form
+        return res.redirect('/new-organization');
+    }
 
-  req.flash('success', 'Organization added successfully!');
+    const { name, description, contactEmail } = req.body;
+    const logoFilename = 'placeholder-logo.png'; // Use the placeholder logo for all new organizations
 
-  res.redirect(`/organization/${organizationId}`);
+    const organizationId = await createOrganization(name, description, contactEmail, logoFilename);
+    res.redirect(`/organization/${organizationId}`);
 };
 
 // Define validation and sanitization rules for organization form

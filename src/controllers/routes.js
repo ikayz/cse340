@@ -7,7 +7,11 @@ import {
 import { showHomePage } from './index.js';
 import { showProjectsPage, showProjectDetailsPage } from './projects.js';
 import { showCategoriesPage, showCategoryDetailsPage } from './categories.js';
-import { showNewOrganizationForm, processNewOrganizationForm } from './organizations.js';
+import {
+  showNewOrganizationForm,
+  processNewOrganizationForm,
+  organizationValidation
+} from './organizations.js';
 import { testErrorPage } from './errors.js';
 
 const router = express.Router();
@@ -20,7 +24,7 @@ router.get('/category/:id', showCategoryDetailsPage);
 router.get('/organization/:id', showOrganizationDetailsPage);
 router.get('/project/:id', showProjectDetailsPage);
 router.get('/new-organization', showNewOrganizationForm);
-router.post('/new-organization', processNewOrganizationForm);
+router.post('/new-organization', organizationValidation, processNewOrganizationForm);
 
 // Error handling
 router.get('/test-error', testErrorPage);
