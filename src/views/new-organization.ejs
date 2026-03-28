@@ -2,19 +2,22 @@
   <main>
     <div class="form-wrapper">
       <div class="form-header">
-        <h1><%= title %></h1>
+        <h1>
+          <%= title %>
+        </h1>
         <p>Fill out the details below to add a new organization.</p>
       </div>
 
       <form action="/new-organization" method="POST" class="styled-form">
         <div class="form-group">
           <label for="name">Organization Name</label>
-          <input type="text" id="name" name="name" placeholder="e.g. Acme Corp" required />
+          <input type="text" id="name" name="name" placeholder="e.g. Acme Corp" required maxlength="150" />
         </div>
 
         <div class="form-group">
           <label for="description">Description</label>
-          <textarea id="description" name="description" placeholder="Briefly describe the organization..." required></textarea>
+          <textarea id="description" name="description" placeholder="Briefly describe the organization..." required
+            maxlength="500"></textarea>
         </div>
 
         <div class="form-group">
@@ -26,4 +29,4 @@
       </form>
     </div>
   </main>
-<%- include('partials/footer') %>
+  <%- include('partials/footer') %>

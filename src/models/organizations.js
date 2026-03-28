@@ -30,4 +30,12 @@ const getOrganizationDetails = async organizationId => {
   return result.rows.length > 0 ? result.rows[0] : null;
 };
 
-export { getAllOrganizations, getOrganizationDetails };
+const showEditOrganizationForm = async (req, res) => {
+  const organizationId = req.params.id;
+  const organizationDetails = await getOrganizationDetails(organizationId);
+
+  const title = 'Edit Organization';
+  res.render('edit-organization', { title, organizationDetails });
+};
+
+export { getAllOrganizations, getOrganizationDetails, showEditOrganizationForm };
