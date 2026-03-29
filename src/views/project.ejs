@@ -13,8 +13,11 @@
     </p>
 
     <p>
-      <strong>Date:</strong> <%= new Date(projectDetails.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) %><br>
-      <strong>Location:</strong> <%= projectDetails.location %>
+      <strong>Date:</strong>
+      <%= new Date(projectDetails.date).toLocaleDateString('en-GB', { day: 'numeric' , month: 'long' , year: 'numeric'
+        }) %><br>
+        <strong>Location:</strong>
+        <%= projectDetails.location %>
     </p>
 
     <p>Organization: <a href="/organization/<%= projectDetails.organization_id %>">
@@ -23,12 +26,16 @@
 
     <div class="categories">
       <strong>Categories:</strong>
-      <% categories.forEach(category => { %>
+      <% categories.forEach(category=> { %>
         <a href="/category/<%= category.category_id %>">
           <%= category.name %>
         </a>
-      <% }) %>
+        <% }) %>
+          <span class="edit-link">
+            [ <a href="/assign-categories/<%= projectDetails.project_id %>">Edit Categories</a> ]
+          </span>
     </div>
+
   </main>
 
   <%- include('partials/footer') %>
