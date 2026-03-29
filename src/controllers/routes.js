@@ -22,7 +22,12 @@ import {
   showCategoriesPage,
   showCategoryDetailsPage,
   showAssignCategoriesForm,
-  processAssignCategoriesForm } from './categories.js';
+  processAssignCategoriesForm,
+  showNewCategoryForm,
+  processNewCategoryForm,
+  showEditCategoryForm,
+  processEditCategoryForm,
+  categoryValidation } from './categories.js';
 import { testErrorPage } from './errors.js';
 
 const router = express.Router();
@@ -39,12 +44,16 @@ router.get('/edit-organization/:id', showEditOrganizationForm);
 router.get('/new-project', showNewProjectForm);
 router.get('/edit-project/:id', showEditProjectForm);
 router.get('/assign-categories/:projectId', showAssignCategoriesForm);
+router.get('/new-category', showNewCategoryForm);
+router.get('/edit-category/:id', showEditCategoryForm);
 
 router.post('/new-organization', organizationValidation, processNewOrganizationForm);
 router.post('/edit-organization/:id', organizationValidation, processEditOrganizationForm);
 router.post('/new-project', projectValidation, processNewProjectForm);
 router.post('/edit-project/:id', projectValidation, processEditProjectForm);
 router.post('/assign-categories/:projectId', processAssignCategoriesForm);
+router.post('/new-category', categoryValidation, processNewCategoryForm);
+router.post('/edit-category/:id', categoryValidation, processEditCategoryForm);
 
 // Error handling
 router.get('/test-error', testErrorPage);
