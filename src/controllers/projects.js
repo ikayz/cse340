@@ -1,4 +1,4 @@
-import { getUpcomingProjects, getProjectDetails, createProject } from '../models/projects.js';
+import { getUpcomingProjects, getProjectDetails, createProject, updateProject } from '../models/projects.js';
 import { getAllOrganizations } from '../models/organizations.js';
 import { getCategoriesByProjectId } from '../models/categories.js';
 import { body, validationResult } from 'express-validator';
@@ -86,4 +86,42 @@ const projectValidation = [
     .withMessage('Please select a valid organization')
 ];
 
-export { showProjectsPage, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, projectValidation };
+const showEditProjectForm = async (req, res) => {
+  const projectId = req.params.id;
+  const projectDetails = await getProjectDetails(projectId);
+  const organizations = await getAllOrganizations();
+  const title = 'Edit Project';
+
+  if (projectDetails && projectDetails.date) {
+    projectDetails.formattedDate = new Date(projectDetails.date).toISOString().split('T')[0];
+  }
+
+  res.render('edit-project', { title, projectDetails, organizations, path: req.path });
+};
+
+const processEditProjectForm = async (req, res) => {
+  const projectId = req.params.id;
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    errors.array().forEach(error => {
+      req.flash('error', error.msg);
+    });
+    return res.redirect(`/edit-project/${projectId}`);
+  }
+
+  const { title, description, location, projectDate, organizationId } = req.body;
+
+  try {
+    await updateProject(projectId, organizationId, title, description, location, projectDate);
+
+    req.flash('success', 'Project updated successfully');
+    res.redirect(`/project/${projectId}`);
+  } catch (error) {
+    console.error('Error updating project:', error);
+    req.flash('error', 'Failed to update project');
+    res.redirect(`/edit-project/${projectId}`);
+  }
+};
+
+export { showProjectsPage, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, showEditProjectForm, processEditProjectForm, projectValidation };

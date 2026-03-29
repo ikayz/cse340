@@ -15,6 +15,8 @@ import {
   showProjectDetailsPage,
   showNewProjectForm,
   processNewProjectForm,
+  showEditProjectForm,
+  processEditProjectForm,
   projectValidation } from './projects.js';
 import {
   showCategoriesPage,
@@ -35,10 +37,13 @@ router.get('/project/:id', showProjectDetailsPage);
 router.get('/new-organization', showNewOrganizationForm);
 router.get('/edit-organization/:id', showEditOrganizationForm);
 router.get('/new-project', showNewProjectForm);
+router.get('/edit-project/:id', showEditProjectForm);
 router.get('/assign-categories/:projectId', showAssignCategoriesForm);
+
 router.post('/new-organization', organizationValidation, processNewOrganizationForm);
 router.post('/edit-organization/:id', organizationValidation, processEditOrganizationForm);
 router.post('/new-project', projectValidation, processNewProjectForm);
+router.post('/edit-project/:id', projectValidation, processEditProjectForm);
 router.post('/assign-categories/:projectId', processAssignCategoriesForm);
 
 // Error handling
