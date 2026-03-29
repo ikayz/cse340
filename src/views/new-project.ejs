@@ -1,0 +1,47 @@
+<%- include('partials/header') %>
+  <main>
+    <div class="form-wrapper">
+      <div class="form-header">
+        <h1>
+          <%= title %>
+        </h1>
+        <p>Fill out the details below to add a new service project.</p>
+      </div>
+
+      <form action="/new-project" method="POST" class="styled-form">
+        <div class="form-group">
+          <label for="organizationId">Organization</label>
+          <select id="organizationId" name="organizationId" required>
+            <option value="" disabled selected>Select an Organization</option>
+            <% organizations.forEach(org => { %>
+              <option value="<%= org.organization_id %>"><%= org.name %></option>
+            <% }) %>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="title">Project Title</label>
+          <input type="text" id="title" name="title" placeholder="e.g. Community Cleanup" required maxlength="150" />
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" name="description" placeholder="Briefly describe the service project..." required
+            maxlength="500"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="location">Location</label>
+          <input type="text" id="location" name="location" placeholder="e.g. City Park" required />
+        </div>
+
+        <div class="form-group">
+          <label for="projectDate">Project Date</label>
+          <input type="date" id="projectDate" name="projectDate" required />
+        </div>
+
+        <button type="submit" class="btn-submit">Create Project</button>
+      </form>
+    </div>
+  </main>
+  <%- include('partials/footer') %>
