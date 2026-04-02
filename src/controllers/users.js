@@ -1,11 +1,41 @@
 import bcrypt from 'bcrypt';
-import { createUser } from '../models/users.js';
+import { createUser, authenticateUser } from '../models/users.js';
+import { body, validationResult } from 'express-validator';
 
 const showUserRegistrationForm = (req, res) => {
-    res.render('register', { title: 'Registration' });
+    res.render('register', { title: 'Registration', path: req.path });
 }
 
+const userRegistrationValidation = [
+  body('name')
+    .trim()
+    .notEmpty()
+    .withMessage('Name is required')
+    .isLength({ max: 100 })
+    .withMessage('Name cannot exceed 100 characters'),
+  body('email')
+    .normalizeEmail()
+    .notEmpty()
+    .withMessage('Email is required')
+    .isEmail()
+    .withMessage('Please provide a valid email address'),
+  body('password')
+    .trim()
+    .notEmpty()
+    .withMessage('Password is required')
+    .isLength({ min: 8 })
+    .withMessage('Password must be at least 8 characters long'),
+];
+
 const processUserRegistrationForm = async (req, res) => {
+    const results = validationResult(req);
+    if (!results.isEmpty()) {
+      results.array().forEach(error => {
+        req.flash('error', error.msg);
+      });
+      return res.redirect('/register');
+    }
+
     const { name, email, password } = req.body;
 
     try {
@@ -26,4 +56,46 @@ const processUserRegistrationForm = async (req, res) => {
     }
 };
 
-export { showUserRegistrationForm, processUserRegistrationForm };
+const showLoginForm = (req, res) => {
+    res.render('login', { title: 'Login', path: req.path });
+};
+
+const processLoginForm = async (req, res) => {
+    const { email, password } = req.body;
+
+    // Call authenticateUser to verify credentials
+    const user = await authenticateUser(email, password);
+
+    if (user) {
+        // Valid user: save to session, flash success, log, and redirect
+        req.session.user = user;
+        req.flash('success', 'Login successful!');
+        console.log('User logged in:', user);
+        res.redirect('/');
+    } else {
+        // Invalid credentials
+        req.flash('error', 'Login failed. Please check your email and password.');
+        res.redirect('/login');
+    }
+};
+
+const processLogout = (req, res) => {
+    req.session.destroy();
+
+    try {
+        req.flash('success', 'You have successfully logged out.');
+    } catch (err) {
+        // Flash failed because session is destroyed
+    }
+
+    res.redirect('/login');
+};
+
+export {
+    showUserRegistrationForm,
+    processUserRegistrationForm,
+    userRegistrationValidation,
+    showLoginForm,
+    processLoginForm,
+    processLogout
+};
