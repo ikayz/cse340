@@ -35,7 +35,9 @@ import {
   userRegistrationValidation,
   showLoginForm,
   processLoginForm,
-  processLogout
+  processLogout,
+  requireLogin,
+  showDashboard
 } from './users.js';
 
 const router = express.Router();
@@ -57,6 +59,7 @@ router.get('/edit-category/:id', showEditCategoryForm);
 router.get('/register', showUserRegistrationForm);
 router.get('/login', showLoginForm);
 router.get('/logout', processLogout);
+router.get('/dashboard', requireLogin, showDashboard);
 
 router.post('/new-organization', organizationValidation, processNewOrganizationForm);
 router.post('/edit-organization/:id', organizationValidation, processEditOrganizationForm);

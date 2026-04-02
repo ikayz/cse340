@@ -71,7 +71,7 @@ const processLoginForm = async (req, res) => {
         req.session.user = user;
         req.flash('success', 'Login successful!');
         console.log('User logged in:', user);
-        res.redirect('/');
+        res.redirect('/dashboard');
     } else {
         // Invalid credentials
         req.flash('error', 'Login failed. Please check your email and password.');
@@ -91,11 +91,37 @@ const processLogout = (req, res) => {
     res.redirect('/login');
 };
 
+/**
+ * Middleware to require a user to be logged in
+ */
+const requireLogin = (req, res, next) => {
+    if (!req.session.user) {
+        req.flash('error', 'You must be logged in to access that page.');
+        return res.redirect('/login');
+    }
+    next();
+};
+
+/**
+ * Renders the dashboard page for a logged-in user
+ */
+const showDashboard = (req, res) => {
+    const { name, email } = req.session.user;
+    res.render('dashboard', { 
+        title: 'User Dashboard', 
+        name, 
+        email, 
+        path: req.path 
+    });
+};
+
 export {
     showUserRegistrationForm,
     processUserRegistrationForm,
     userRegistrationValidation,
     showLoginForm,
     processLoginForm,
-    processLogout
+    processLogout,
+    requireLogin,
+    showDashboard
 };
