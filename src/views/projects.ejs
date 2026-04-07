@@ -27,9 +27,12 @@
         </div>
         <% }) %>
     </div>
-    <div style="margin-top: 2rem; text-align: center;">
-      <a href="/new-project" class="btn-submit" style="display: inline-block; width: auto; padding: 0.75rem 1.5rem;">Add a New Service Project</a>
-    </div>
+    <% if (user && user.role_name==='admin' ) { %>
+      <div style="margin-top: 2rem; text-align: center;">
+        <a href="/new-project" class="btn-submit"
+          style="display: inline-block; width: auto; padding: 0.75rem 1.5rem;">Add a New Service Project</a>
+      </div>
+      <% } %>
   </main>
 
   <%- include('partials/footer') %>

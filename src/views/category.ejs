@@ -6,18 +6,21 @@
     </h1>
 
     <ul class="project-list">
-      <% projects.forEach(project => { %>
+      <% projects.forEach(project=> { %>
         <li>
           <a href="/project/<%= project.project_id %>">
             <%= project.title %>
           </a>
         </li>
-      <% }) %>
+        <% }) %>
     </ul>
 
-    <div class="actions" style="margin-top: 2rem; text-align: center;">
-      <a href="/edit-category/<%= categoryDetails.category_id %>" class="btn-submit" style="display: inline-block; width: auto; padding: 0.5rem 1rem;">Edit Category</a>
-    </div>
+    <% if (user && user.role_name==='admin' ) { %>
+      <div class="actions" style="margin-top: 2rem; text-align: center;">
+        <a href="/edit-category/<%= categoryDetails.category_id %>" class="btn-submit"
+          style="display: inline-block; width: auto; padding: 0.5rem 1rem;">Edit Category</a>
+      </div>
+      <% } %>
   </main>
 
   <%- include('partials/footer') %>

@@ -8,14 +8,19 @@
       <% categories.forEach(category=> { %>
         <div class="card">
           <h3>
-            <a href="/category/<%= category.category_id %>"><%= category.name %></a>
+            <a href="/category/<%= category.category_id %>">
+              <%= category.name %>
+            </a>
           </h3>
         </div>
         <% }) %>
     </div>
-    <div style="margin-top: 2rem; text-align: center;">
-      <a href="/new-category" class="btn-submit" style="display: inline-block; width: auto; padding: 0.75rem 1.5rem;">Add a new category</a>
-    </div>
+    <% if (user && user.role_name==='admin' ) { %>
+      <div style="margin-top: 2rem; text-align: center;">
+        <a href="/new-category" class="btn-submit"
+          style="display: inline-block; width: auto; padding: 0.75rem 1.5rem;">Add a new category</a>
+      </div>
+      <% } %>
   </main>
 
   <%- include('partials/footer') %>
