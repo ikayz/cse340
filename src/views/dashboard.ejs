@@ -10,6 +10,13 @@
       <p>Username: <strong>
           <%= email %>
         </strong>!</p>
+      
+      <% if (role === 'admin') { %>
+        <div class="dashboard-actions" style="margin-top: 2rem;">
+          <h3>Admin Options</h3>
+          <p><a href="/users" class="btn-primary" style="display: inline-block; padding: 0.8rem 1.5rem; background-color: #2c3e50; color: white; text-decoration: none; border-radius: 4px;">View All Registered Users</a></p>
+        </div>
+      <% } %>
     </div>
   </main>
   <%- include('partials/footer') %>

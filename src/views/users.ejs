@@ -1,0 +1,42 @@
+<%- include('partials/header') %>
+  <main>
+    <div class="content-wrapper site-width">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1><%= title %></h1>
+      </div>
+      
+      <div class="table-container" style="margin-top: 2rem; overflow-x: auto;">
+        <table class="styled-table" style="width: 100%; border-collapse: collapse; text-align: left;">
+          <thead>
+            <tr style="background-color: #f4f6f8; border-bottom: 2px solid #ddd;">
+              <th style="padding: 12px 15px;">Name</th>
+              <th style="padding: 12px 15px;">Email (Username)</th>
+              <th style="padding: 12px 15px;">Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (usersList && usersList.length > 0) { %>
+              <% usersList.forEach(user => { %>
+                <tr style="border-bottom: 1px solid #ddd;">
+                  <td style="padding: 12px 15px;"><%= user.name %></td>
+                  <td style="padding: 12px 15px;"><%= user.email %></td>
+                  <td style="padding: 12px 15px;">
+                    <span style="padding: 5px 10px; border-radius: 4px; font-size: 0.9em; font-weight: bold; 
+                                 background-color: <%= user.role_name === 'admin' ? '#e74c3c' : '#3498db' %>; 
+                                 color: white;">
+                      <%= user.role_name.charAt(0).toUpperCase() + user.role_name.slice(1) %>
+                    </span>
+                  </td>
+                </tr>
+              <% }) %>
+            <% } else { %>
+              <tr>
+                <td colspan="3" style="padding: 12px 15px; text-align: center;">No users found in the database.</td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+<%- include('partials/footer') %>

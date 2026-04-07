@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { createUser, authenticateUser } from '../models/users.js';
+import { createUser, authenticateUser, getAllUsers } from '../models/users.js';
 import { body, validationResult } from 'express-validator';
 
 const showUserRegistrationForm = (req, res) => {
@@ -117,7 +117,7 @@ const requireRole = (role) => {
         // Check if user's role matches the required role
         if (req.session.user.role_name !== role) {
             req.flash('error', 'You do not have permission to access this page.');
-            return res.redirect('/');
+            return res.redirect('/dashboard');
         }
 
         // User has required role, continue
@@ -129,13 +129,32 @@ const requireRole = (role) => {
  * Renders the dashboard page for a logged-in user
  */
 const showDashboard = (req, res) => {
-    const { name, email } = req.session.user;
+    const { name, email, role_name } = req.session.user;
     res.render('dashboard', { 
         title: 'User Dashboard', 
         name, 
         email, 
+        role: role_name,
         path: req.path 
     });
+};
+
+/**
+ * Renders the users list page (admin only)
+ */
+const showAllUsersPage = async (req, res) => {
+    try {
+        const usersList = await getAllUsers();
+        res.render('users', { 
+            title: 'Registered Users', 
+            usersList, 
+            path: req.path 
+        });
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        req.flash('error', 'Could not retrieve users list.');
+        res.redirect('/dashboard');
+    }
 };
 
 export {
@@ -147,5 +166,6 @@ export {
     processLogout,
     requireLogin,
     requireRole,
-    showDashboard
+    showDashboard,
+    showAllUsersPage
 };

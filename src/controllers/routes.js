@@ -38,7 +38,8 @@ import {
   processLogout,
   requireLogin,
   requireRole,
-  showDashboard
+  showDashboard,
+  showAllUsersPage
 } from './users.js';
 
 const router = express.Router();
@@ -61,6 +62,7 @@ router.get('/register', showUserRegistrationForm);
 router.get('/login', showLoginForm);
 router.get('/logout', processLogout);
 router.get('/dashboard', requireLogin, showDashboard);
+router.get('/users', requireRole('admin'), showAllUsersPage);
 
 router.post('/new-organization', requireRole('admin'), organizationValidation, processNewOrganizationForm);
 router.post('/edit-organization/:id', requireRole('admin'), organizationValidation, processEditOrganizationForm);
