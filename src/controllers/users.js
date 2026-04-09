@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import { createUser, authenticateUser, getAllUsers } from '../models/users.js';
+import { getUserVolunteerProjects } from '../models/projects.js';
 import { body, validationResult } from 'express-validator';
 
 const showUserRegistrationForm = (req, res) => {
@@ -128,13 +129,22 @@ const requireRole = (role) => {
 /**
  * Renders the dashboard page for a logged-in user
  */
-const showDashboard = (req, res) => {
-    const { name, email, role_name } = req.session.user;
+const showDashboard = async (req, res) => {
+    const { name, email, role_name, user_id } = req.session.user;
+    
+    let volunteerProjects = [];
+    try {
+       volunteerProjects = await getUserVolunteerProjects(user_id);
+    } catch (err) {
+       console.error('Error fetching dashboard projects:', err);
+    }
+
     res.render('dashboard', { 
         title: 'User Dashboard', 
         name, 
         email, 
         role: role_name,
+        volunteerProjects,
         path: req.path 
     });
 };

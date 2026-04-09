@@ -11,6 +11,62 @@
           <%= email %>
         </strong>!</p>
       
+      <style>
+        .volunteer-card {
+           padding: 1.5rem; 
+           border: 1px solid #e0e0e0; 
+           border-radius: 8px; 
+           box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
+           display: flex; 
+           flex-direction: row; 
+           align-items: center;
+           gap: 1.5rem;
+           background-color: #fff;
+        }
+        .btn-remove-volunteer {
+           color: #e74c3c; 
+           background: transparent; 
+           border: 1px solid #e74c3c; 
+           padding: 0.4rem 0.8rem; 
+           border-radius: 4px; 
+           text-decoration: none; 
+           font-size: 0.85em; 
+           font-weight: 600; 
+           display: inline-block; 
+           transition: all 0.2s ease;
+        }
+        .btn-remove-volunteer:hover {
+           background-color: #e74c3c;
+           color: #fff;
+        }
+      </style>
+      
+      <div class="volunteer-projects" style="margin-top: 2rem;">
+        <h3>My Volunteer Projects</h3>
+        <% if (typeof volunteerProjects !== 'undefined' && volunteerProjects.length > 0) { %>
+          <div class="card-container">
+            <% volunteerProjects.forEach(project => { %>
+              <div class="volunteer-card">
+                <div style="flex: 1;">
+                  <h4 style="margin-top: 0; margin-bottom: 0.5rem;"><a href="/project/<%= project.project_id %>" style="text-decoration: none; color: #2c3e50;"><%= project.title %></a></h4>
+                  <p style="color: #666; font-size: 0.9em; margin-bottom: 1.5rem;"><strong>Date:</strong> <%= new Date(project.date).toLocaleDateString(undefined, { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }) %></p>
+                  <div>
+                    <a href="/unvolunteer/<%= project.project_id %>" class="btn-remove-volunteer">Remove Volunteer</a>
+                  </div>
+                </div>
+                <% if (project.logo_filename) { %>
+                  <div style="width: 80px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                    <img src="/images/<%= project.logo_filename %>" alt="<%= project.organization_name %> logo" style="max-width: 100%; max-height: 80px; object-fit: contain;">
+                  </div>
+                <% } %>
+              </div>
+            <% }); %>
+          </div>
+        <% } else { %>
+          <p>You have not signed up for any volunteer projects yet. <a href="/projects">Explore upcoming projects!</a></p>
+        <% } %>
+      </div>
+
       <% if (role === 'admin') { %>
         <div class="dashboard-actions" style="margin-top: 2rem;">
           <h3>Admin Options</h3>

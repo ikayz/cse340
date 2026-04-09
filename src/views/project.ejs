@@ -37,12 +37,26 @@
             </span>
             <% } %>
     </div>
+    
+    <div class="volunteer-action" style="margin-top: 2rem;">
+      <% if (isLoggedIn) { %>
+        <% if (isVolunteered) { %>
+          <div style="padding: 1rem; border: 1px solid #c3e6cb; background-color: #d4edda; color: #155724; border-radius: 4px;">
+            <p><strong>You are volunteering for this project!</strong></p>
+            <a href="/unvolunteer/<%= projectDetails.project_id %>" class="btn-submit" style="background-color: #e74c3c; display: inline-block; width: auto; padding: 0.5rem 1rem; text-decoration: none; margin-top: 0.5rem;">Remove Volunteer</a>
+          </div>
+        <% } else { %>
+          <a href="/volunteer/<%= projectDetails.project_id %>" class="btn-submit" style="display: inline-block; width: auto; padding: 0.8rem 1.5rem; text-decoration: none; font-weight: bold; background-color: #27ae60;">Volunteer for this Project</a>
+        <% } %>
+      <% } %>
+    </div>
+
     <% if (user && user.role_name==='admin' ) { %>
-      <div class="actions" style="margin-top: 2rem;">
+      <div class="actions" style="margin-top: 2rem; border-top: 1px solid #ddd; padding-top: 1rem;">
         <a href="/edit-project/<%= projectDetails.project_id %>" class="btn-submit"
           style="display: inline-block; width: auto; padding: 0.5rem 1rem;">Edit Project</a>
       </div>
-      <% } %>
+    <% } %>
 
   </main>
 

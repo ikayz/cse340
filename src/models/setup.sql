@@ -41,6 +41,12 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE project_volunteers (
+    project_id INT NOT NULL REFERENCES service_projects(project_id) ON DELETE CASCADE,
+    user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    PRIMARY KEY (project_id, user_id)
+);
+
 INSERT INTO organization (name, description, contact_email, logo_filename)
 VALUES
     (
@@ -86,26 +92,32 @@ VALUES
 (3, 'Disaster Relief Support', 'Providing aid to flood-affected families.', 'Chingola Township', '2026-05-10'),
 (3, 'Literacy Campaign', 'Teaching adults basic reading and writing.', 'Lusaka Community Hall', '2026-05-17');
 
-INSERT INTO project_categories (project_id, category_id) VALUES
-(16, 1), -- School Renovation → Education
-(17, 1), -- Community Housing Project → Education
-(18, 3), -- Water Well Construction → Health
-(19, 1), -- Library Setup → Education
-(20, 1); -- Playground Installation → Education
+INSERT INTO categories (category_id, name) VALUES
+(1, 'Education'),
+(2, 'Environment'),
+(3, 'Health')
+ON CONFLICT (category_id) DO NOTHING;
 
 INSERT INTO project_categories (project_id, category_id) VALUES
-(21, 2), -- Organic Farming Workshop → Environment
-(22, 2), -- Community Garden → Environment
-(23, 2), -- Seed Distribution Drive → Environment
-(24, 2), -- Irrigation System Setup → Environment
-(25, 2); -- Composting Training → Environment
+(1, 1), -- School Renovation → Education
+(2, 1), -- Community Housing Project → Education
+(3, 3), -- Water Well Construction → Health
+(4, 1), -- Library Setup → Education
+(5, 1); -- Playground Installation → Education
 
 INSERT INTO project_categories (project_id, category_id) VALUES
-(26, 3), -- Health Screening Camp → Health
-(27, 3), -- Blood Donation Drive → Health
-(28, 1), -- Youth Mentorship Program → Education
-(29, 3), -- Disaster Relief Support → Health
-(30, 1); -- Literacy Campaign → Education
+(6, 2), -- Organic Farming Workshop → Environment
+(7, 2), -- Community Garden → Environment
+(8, 2), -- Seed Distribution Drive → Environment
+(9, 2), -- Irrigation System Setup → Environment
+(10, 2); -- Composting Training → Environment
+
+INSERT INTO project_categories (project_id, category_id) VALUES
+(11, 3), -- Health Screening Camp → Health
+(12, 3), -- Blood Donation Drive → Health
+(13, 1), -- Youth Mentorship Program → Education
+(14, 3), -- Disaster Relief Support → Health
+(15, 1); -- Literacy Campaign → Education
 
 INSERT INTO roles (role_name, role_description) VALUES
 ('user', 'Standard user with basic access'),

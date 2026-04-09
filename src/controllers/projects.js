@@ -1,4 +1,4 @@
-import { getUpcomingProjects, getProjectDetails, createProject, updateProject } from '../models/projects.js';
+import { getUpcomingProjects, getProjectDetails, createProject, updateProject, addVolunteer, removeVolunteer, checkIfUserVolunteered } from '../models/projects.js';
 import { getAllOrganizations } from '../models/organizations.js';
 import { getCategoriesByProjectId } from '../models/categories.js';
 import { body, validationResult } from 'express-validator';
@@ -18,7 +18,12 @@ const showProjectDetailsPage = async (req, res) => {
   const categories = await getCategoriesByProjectId(projectId);
   const title = 'Project Details';
 
-  res.render('project', { title, projectDetails, categories, path: req.path });
+  let isVolunteered = false;
+  if (req.session && req.session.user) {
+    isVolunteered = await checkIfUserVolunteered(projectId, req.session.user.user_id);
+  }
+
+  res.render('project', { title, projectDetails, categories, isVolunteered, path: req.path });
 };
 
 const showNewProjectForm = async (req, res) => {
@@ -124,4 +129,45 @@ const processEditProjectForm = async (req, res) => {
   }
 };
 
-export { showProjectsPage, showProjectDetailsPage, showNewProjectForm, processNewProjectForm, showEditProjectForm, processEditProjectForm, projectValidation };
+const processAddVolunteer = async (req, res) => {
+  const projectId = req.params.projectId;
+  const userId = req.session.user.user_id;
+
+  try {
+    await addVolunteer(projectId, userId);
+    req.flash('success', 'You have successfully signed up to volunteer for this project!');
+  } catch (error) {
+    console.error('Error volunteering:', error);
+    req.flash('error', 'Failed to sign up for volunteering.');
+  }
+  
+  res.redirect(`/project/${projectId}`);
+};
+
+const processRemoveVolunteer = async (req, res) => {
+  const projectId = req.params.projectId;
+  const userId = req.session.user.user_id;
+
+  try {
+    await removeVolunteer(projectId, userId);
+    req.flash('success', 'You have been removed from the volunteer list.');
+  } catch (error) {
+    console.error('Error un-volunteering:', error);
+    req.flash('error', 'Failed to remove volunteer status.');
+  }
+
+  const referer = req.get('Referrer') || `/project/${projectId}`;
+  res.redirect(referer);
+};
+
+export { 
+  showProjectsPage, 
+  showProjectDetailsPage, 
+  showNewProjectForm, 
+  processNewProjectForm, 
+  showEditProjectForm, 
+  processEditProjectForm, 
+  projectValidation,
+  processAddVolunteer,
+  processRemoveVolunteer
+};

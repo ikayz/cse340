@@ -157,4 +157,63 @@ const updateProject = async (projectId, organizationId, title, description, loca
   return result.rows[0].project_id;
 };
 
-export { getAllProjects, getUpcomingProjects, getProjectsByOrganizationId, getProjectDetails, getProjectsByCategoryId, createProject, updateProject };
+const addVolunteer = async (projectId, userId) => {
+  const query = `
+    INSERT INTO project_volunteers (project_id, user_id)
+    VALUES ($1, $2)
+    ON CONFLICT (project_id, user_id) DO NOTHING;
+  `;
+  await db.query(query, [projectId, userId]);
+};
+
+const removeVolunteer = async (projectId, userId) => {
+  const query = `
+    DELETE FROM project_volunteers
+    WHERE project_id = $1 AND user_id = $2;
+  `;
+  await db.query(query, [projectId, userId]);
+};
+
+const checkIfUserVolunteered = async (projectId, userId) => {
+  const query = `
+    SELECT 1 FROM project_volunteers
+    WHERE project_id = $1 AND user_id = $2;
+  `;
+  const result = await db.query(query, [projectId, userId]);
+  return result.rowCount > 0;
+};
+
+const getUserVolunteerProjects = async (userId) => {
+  const query = `
+    SELECT
+      sp.project_id,
+      sp.title,
+      sp.description,
+      sp.location,
+      sp.project_date AS date,
+      o.organization_id,
+      o.name AS organization_name,
+      o.logo_filename
+    FROM service_projects sp
+    JOIN project_volunteers pv ON sp.project_id = pv.project_id
+    JOIN organization o ON sp.organization_id = o.organization_id
+    WHERE pv.user_id = $1
+    ORDER BY sp.project_date ASC;
+  `;
+  const result = await db.query(query, [userId]);
+  return result.rows;
+};
+
+export { 
+  getAllProjects, 
+  getUpcomingProjects, 
+  getProjectsByOrganizationId, 
+  getProjectDetails, 
+  getProjectsByCategoryId, 
+  createProject, 
+  updateProject,
+  addVolunteer,
+  removeVolunteer,
+  checkIfUserVolunteered,
+  getUserVolunteerProjects
+};
