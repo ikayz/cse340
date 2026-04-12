@@ -36,15 +36,16 @@
     </div>
   </nav>
 
-  <% const messages=flash(); %>
+  <div id="toast-container" class="toast-container">
+    <% const messages=flash(); %>
     <% Object.keys(messages).forEach(type=> { %>
       <% if (messages[type].length> 0) { %>
-
         <% messages[type].forEach(msg=> { %>
-          <div class="alert <%= type %>">
-            <%= msg %>
+          <div class="toast-alert <%= type %>" role="alert">
+            <div class="toast-content"><%= msg %></div>
+            <button aria-label="Close" class="toast-close" onclick="this.parentElement.style.display='none';">&times;</button>
           </div>
-          <% }); %>
-
-            <% } %>
-              <% }); %>
+        <% }); %>
+      <% } %>
+    <% }); %>
+  </div>

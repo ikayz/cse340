@@ -4,12 +4,11 @@
       <%= title %>
     </h1>
     <div class="content-wrapper site-width">
-      <p>Name: <strong>
-          <%= name %>
-        </strong>!</p>
-      <p>Username: <strong>
-          <%= email %>
-        </strong>!</p>
+      <div class="dashboard-hero" style="background: linear-gradient(135deg, #26547c, #003366); border-radius: 12px; padding: 2.5rem; color: white; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+        <h2 style="color: white; margin-top: 0; font-size: 2.2rem; font-weight: 700;">Welcome back, <%= name.split(' ')[0] %>! 👋</h2>
+        <p style="color: rgba(255,255,255,0.8); margin-bottom: 1rem; font-size: 1.1rem;">You are currently actively volunteering for <strong><%= volunteerProjects ? volunteerProjects.length : 0 %></strong> project<%= (!volunteerProjects || volunteerProjects.length !== 1) ? 's' : '' %></p>
+        <p style="margin: 0; font-size: 0.85rem; opacity: 0.7; font-family: monospace;"><%= email %></p>
+      </div>
       
       <style>
         .volunteer-card {
@@ -63,7 +62,14 @@
             <% }); %>
           </div>
         <% } else { %>
-          <p>You have not signed up for any volunteer projects yet. <a href="/projects">Explore upcoming projects!</a></p>
+          <div class="empty-state" style="text-align: center; padding: 4rem 2rem; background-color: #f8f9fa; border: 2px dashed #ddd; border-radius: 12px; margin-top: 1.5rem;">
+            <svg style="width: 64px; height: 64px; color: #adb5bd; margin-bottom: 1rem;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+            </svg>
+            <h3 style="color: #495057; margin-bottom: 0.5rem; margin-top:0;">No actively selected projects</h3>
+            <p style="color: #6c757d; margin-bottom: 1.5rem; max-width: 400px; margin-left: auto; margin-right: auto; line-height: 1.5;">It looks like you haven't committed to any upcoming projects yet. Browse our directory and find a cause to support!</p>
+            <a href="/projects" style="display: inline-block; background-color: #26547c; color: white; padding: 0.8rem 1.8rem; border-radius: 6px; font-weight: bold; text-decoration: none; box-shadow: 0 4px 6px rgba(38,84,124,0.2); transition: transform 0.2s;">Explore Upcoming Projects</a>
+          </div>
         <% } %>
       </div>
 

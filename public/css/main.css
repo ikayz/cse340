@@ -440,32 +440,60 @@ button:focus {
   transform: translateY(0);
   box-shadow: 0 2px 6px rgba(26, 60, 90, 0.2);
 }
-/* Flash message styles */
-.alert {
-  padding: 15px;
-  margin-bottom: 20px;
-  border: 1px solid transparent;
-  border-radius: 4px;
+/* Toast Notifications Container */
+.toast-container {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
-.alert.success {
-  color: #155724;
-  background-color: #d4edda;
-  border-color: #c3e6cb;
+
+/* Base Toast Styles */
+.toast-alert {
+  min-width: 300px;
+  max-width: 400px;
+  padding: 16px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 500;
+  animation: slideInRight 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards, fadeOut 0.5s ease 4.5s forwards;
+  background-color: var(--white);
+  border-left: 6px solid transparent;
 }
-.alert.error {
-  color: #721c24;
-  background-color: #f8d7da;
-  border-color: #f5c6cb;
+
+/* Contextual Colors */
+.toast-alert.success { border-left-color: #27ae60; color: #155724; background-color: #f1fbf4; }
+.toast-alert.error { border-left-color: #e74c3c; color: #721c24; background-color: #fdf3f2; }
+.toast-alert.warning { border-left-color: #f1c40f; color: #856404; background-color: #fdfbf0; }
+.toast-alert.info { border-left-color: #3498db; color: #0c5460; background-color: #f1f8fc; }
+
+/* Close Button */
+.toast-close {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  line-height: 1;
+  color: #999;
+  cursor: pointer;
+  padding-left: 15px;
+  transition: opacity 0.2s, color 0.2s;
 }
-.alert.warning {
-  color: #856404;
-  background-color: #fff3cd;
-  border-color: #ffeeba;
+.toast-close:hover { color: #333; }
+
+/* Animations */
+@keyframes slideInRight {
+  from { transform: translateX(120%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
 }
-.alert.info {
-  color: #0c5460;
-  background-color: #d1ecf1;
-  border-color: #bee5eb;
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; pointer-events: none; }
 }
 
 /* Checkbox specific overrides in styled forms */
