@@ -64,32 +64,36 @@ const showLoginForm = (req, res) => {
 const processLoginForm = async (req, res) => {
     const { email, password } = req.body;
 
-    // Call authenticateUser to verify credentials
-    const user = await authenticateUser(email, password);
+    try {
+        const user = await authenticateUser(email, password);
 
-    if (user) {
-        // Valid user: save to session, flash success, log, and redirect
-        req.session.user = user;
-        req.flash('success', 'Login successful!');
-        console.log('User logged in:', user);
-        res.redirect('/dashboard');
-    } else {
-        // Invalid credentials
+        if (user) {
+            req.session.user = user;
+            req.flash('success', 'Login successful!');
+            console.log('User logged in:', user);
+            return res.redirect('/dashboard');
+        }
+
         req.flash('error', 'Login failed. Please check your email and password.');
-        res.redirect('/login');
+        return res.redirect('/login');
+    } catch (error) {
+        console.error('Error logging in user:', error);
+        req.flash('error', 'An error occurred during login. Please try again.');
+        return res.redirect('/login');
     }
 };
 
 const processLogout = (req, res) => {
-    req.session.destroy();
+    req.session.destroy(err => {
+        if (err) {
+            console.error('Error destroying session:', err);
+            req.flash('error', 'Unable to log out right now. Please try again.');
+            return res.redirect('/dashboard');
+        }
 
-    try {
-        req.flash('success', 'You have successfully logged out.');
-    } catch (err) {
-        // Flash failed because session is destroyed
-    }
-
-    res.redirect('/login');
+        res.clearCookie('service-network.sid');
+        return res.redirect('/login');
+    });
 };
 
 /**

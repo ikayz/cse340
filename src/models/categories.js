@@ -47,18 +47,35 @@ const assignCategoryToProject = async (projectId, categoryId) => {
 };
 
 const updateCategoryAssignments = async (projectId, categoryIds) => {
-  // First, remove existing category assignments for the project
-  const deleteQuery = `
-      DELETE FROM project_categories
-      WHERE project_id = $1;
-  `;
-  await db.query(deleteQuery, [projectId]);
-
-  // Next, add the new category assignments
-  // Ensure we use the correct array or handle undefined
   const ids = Array.isArray(categoryIds) ? categoryIds : (categoryIds ? [categoryIds] : []);
-  for (const categoryId of ids) {
-      await assignCategoryToProject(projectId, categoryId);
+  const client = await db.connect();
+
+  try {
+    await client.query('BEGIN');
+    await client.query(
+      `
+        DELETE FROM project_categories
+        WHERE project_id = $1;
+      `,
+      [projectId],
+    );
+
+    for (const categoryId of ids) {
+      await client.query(
+        `
+          INSERT INTO project_categories (project_id, category_id)
+          VALUES ($1, $2);
+        `,
+        [projectId, categoryId],
+      );
+    }
+
+    await client.query('COMMIT');
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
   }
 };
 

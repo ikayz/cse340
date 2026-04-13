@@ -54,10 +54,14 @@
               <svg style="width: 28px; height: 28px; color: #27ae60;" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm13.707-1.293a1 1 0 0 0-1.414-1.414L11 12.586l-1.793-1.793a1 1 0 0 0-1.414 1.414l2.5 2.5a1 1 0 0 0 1.414 0l4-4Z" clip-rule="evenodd"/></svg>
               <p style="margin: 0; font-size: 1.1rem;"><strong>You are actively volunteering for this project!</strong></p>
             </div>
-            <a href="/unvolunteer/<%= projectDetails.project_id %>" class="btn-submit" style="background-color: transparent; color: #e74c3c; border: 1px solid #e74c3c; width: auto; padding: 0.5rem 1rem; text-decoration: none; margin: 0; box-shadow: none; border-radius: 4px; transition: all 0.2s;">Remove Volunteer</a>
+            <form action="/unvolunteer/<%= projectDetails.project_id %>" method="POST" style="margin: 0;">
+              <button type="submit" class="btn-submit" style="background-color: transparent; color: #e74c3c; border: 1px solid #e74c3c; width: auto; padding: 0.5rem 1rem; text-decoration: none; margin: 0; box-shadow: none; border-radius: 4px; transition: all 0.2s;">Remove Volunteer</button>
+            </form>
           </div>
         <% } else { %>
-          <a href="/volunteer/<%= projectDetails.project_id %>" class="btn-submit" style="display: inline-block; width: auto; padding: 0.8rem 1.5rem; text-decoration: none; font-weight: bold; background-color: #27ae60;">Volunteer for this Project</a>
+          <form action="/volunteer/<%= projectDetails.project_id %>" method="POST" style="margin: 0;">
+            <button type="submit" class="btn-submit" style="display: inline-block; width: auto; padding: 0.8rem 1.5rem; text-decoration: none; font-weight: bold; background-color: #27ae60;">Volunteer for this Project</button>
+          </form>
         <% } %>
       <% } %>
     </div>

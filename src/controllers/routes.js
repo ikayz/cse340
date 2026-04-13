@@ -62,12 +62,12 @@ router.get('/new-category', requireRole('admin'), showNewCategoryForm);
 router.get('/edit-category/:id', requireRole('admin'), showEditCategoryForm);
 router.get('/register', showUserRegistrationForm);
 router.get('/login', showLoginForm);
-router.get('/logout', processLogout);
+router.post('/logout', processLogout);
 router.get('/dashboard', requireLogin, showDashboard);
 router.get('/users', requireRole('admin'), showAllUsersPage);
 
-router.get('/volunteer/:projectId', requireLogin, processAddVolunteer);
-router.get('/unvolunteer/:projectId', requireLogin, processRemoveVolunteer);
+router.post('/volunteer/:projectId', requireLogin, processAddVolunteer);
+router.post('/unvolunteer/:projectId', requireLogin, processRemoveVolunteer);
 
 router.post('/new-organization', requireRole('admin'), organizationValidation, processNewOrganizationForm);
 router.post('/edit-organization/:id', requireRole('admin'), organizationValidation, processEditOrganizationForm);

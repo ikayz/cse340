@@ -50,7 +50,9 @@
                   <h4 style="margin-top: 0; margin-bottom: 0.5rem;"><a href="/project/<%= project.project_id %>" style="text-decoration: none; color: #2c3e50;"><%= project.title %></a></h4>
                   <p style="color: #666; font-size: 0.9em; margin-bottom: 1.5rem;"><strong>Date:</strong> <%= new Date(project.date).toLocaleDateString(undefined, { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }) %></p>
                   <div>
-                    <a href="/unvolunteer/<%= project.project_id %>" class="btn-remove-volunteer">Remove Volunteer</a>
+                    <form action="/unvolunteer/<%= project.project_id %>" method="POST" style="margin: 0;">
+                      <button type="submit" class="btn-remove-volunteer">Remove Volunteer</button>
+                    </form>
                   </div>
                 </div>
                 <% if (project.logo_filename) { %>

@@ -123,4 +123,8 @@ INSERT INTO roles (role_name, role_description) VALUES
 ('user', 'Standard user with basic access'),
 ('admin', 'Administrator with full system access');
 
+SELECT setval('organization_organization_id_seq', COALESCE((SELECT MAX(organization_id) FROM organization), 1), true);
+SELECT setval('service_projects_project_id_seq', COALESCE((SELECT MAX(project_id) FROM service_projects), 1), true);
+SELECT setval('categories_category_id_seq', COALESCE((SELECT MAX(category_id) FROM categories), 1), true);
+SELECT setval('roles_role_id_seq', COALESCE((SELECT MAX(role_id) FROM roles), 1), true);
 

@@ -22,7 +22,11 @@
         <li><a href="/projects" class="<%= path === '/projects' ? 'active' : '' %>">Projects</a></li>
         <li><a href="/categories" class="<%= path === '/categories' ? 'active' : '' %>">Categories</a></li>
         <% if (isLoggedIn) { %>
-          <li><a href="/logout">Logout</a></li>
+          <li>
+            <form action="/logout" method="POST" style="margin: 0;">
+              <button type="submit" style="background: none; border: 0; padding: 0; color: inherit; cursor: pointer; font: inherit;">Logout</button>
+            </form>
+          </li>
         <% } else { %>
           <li><a href="/login" class="<%= path === '/login' ? 'active' : '' %>">Login</a></li>
           <li><a href="/register" class="<%= path === '/register' ? 'active' : '' %>">Register</a></li>

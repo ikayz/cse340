@@ -68,6 +68,10 @@ if (
       }
     },
 
+    async connect() {
+      return pool.connect();
+    },
+
     async close() {
       await pool.end();
     },

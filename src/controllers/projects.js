@@ -5,32 +5,51 @@ import { body, validationResult } from 'express-validator';
 
 const NUMBER_OF_UPCOMING_PROJECTS = 5;
 
-const showProjectsPage = async (req, res) => {
-  const projects = await getUpcomingProjects(NUMBER_OF_UPCOMING_PROJECTS);
-  const title = 'Upcoming Service Projects';
+const showProjectsPage = async (req, res, next) => {
+  try {
+    const projects = await getUpcomingProjects(NUMBER_OF_UPCOMING_PROJECTS);
+    const title = 'Upcoming Service Projects';
 
-  res.render('projects', { title, projects, path: req.path });
-};
-
-const showProjectDetailsPage = async (req, res) => {
-  const projectId = req.params.id;
-  const projectDetails = await getProjectDetails(projectId);
-  const categories = await getCategoriesByProjectId(projectId);
-  const title = 'Project Details';
-
-  let isVolunteered = false;
-  if (req.session && req.session.user) {
-    isVolunteered = await checkIfUserVolunteered(projectId, req.session.user.user_id);
+    res.render('projects', { title, projects, path: req.path });
+  } catch (error) {
+    next(error);
   }
-
-  res.render('project', { title, projectDetails, categories, isVolunteered, path: req.path });
 };
 
-const showNewProjectForm = async (req, res) => {
-  const organizations = await getAllOrganizations();
-  const title = 'Add New Project';
+const showProjectDetailsPage = async (req, res, next) => {
+  try {
+    const projectId = req.params.id;
+    const projectDetails = await getProjectDetails(projectId);
 
-  res.render('new-project', { title, organizations, path: req.path });
+    if (!projectDetails) {
+      const err = new Error('Project Not Found');
+      err.status = 404;
+      return next(err);
+    }
+
+    const categories = await getCategoriesByProjectId(projectId);
+    const title = 'Project Details';
+
+    let isVolunteered = false;
+    if (req.session && req.session.user) {
+      isVolunteered = await checkIfUserVolunteered(projectId, req.session.user.user_id);
+    }
+
+    return res.render('project', { title, projectDetails, categories, isVolunteered, path: req.path });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const showNewProjectForm = async (req, res, next) => {
+  try {
+    const organizations = await getAllOrganizations();
+    const title = 'Add New Project';
+
+    res.render('new-project', { title, organizations, path: req.path });
+  } catch (error) {
+    next(error);
+  }
 };
 
 const processNewProjectForm = async (req, res) => {
@@ -91,17 +110,28 @@ const projectValidation = [
     .withMessage('Please select a valid organization')
 ];
 
-const showEditProjectForm = async (req, res) => {
-  const projectId = req.params.id;
-  const projectDetails = await getProjectDetails(projectId);
-  const organizations = await getAllOrganizations();
-  const title = 'Edit Project';
+const showEditProjectForm = async (req, res, next) => {
+  try {
+    const projectId = req.params.id;
+    const projectDetails = await getProjectDetails(projectId);
 
-  if (projectDetails && projectDetails.date) {
-    projectDetails.formattedDate = new Date(projectDetails.date).toISOString().split('T')[0];
+    if (!projectDetails) {
+      const err = new Error('Project Not Found');
+      err.status = 404;
+      return next(err);
+    }
+
+    const organizations = await getAllOrganizations();
+    const title = 'Edit Project';
+
+    if (projectDetails.date) {
+      projectDetails.formattedDate = new Date(projectDetails.date).toISOString().split('T')[0];
+    }
+
+    return res.render('edit-project', { title, projectDetails, organizations, path: req.path });
+  } catch (error) {
+    return next(error);
   }
-
-  res.render('edit-project', { title, projectDetails, organizations, path: req.path });
 };
 
 const processEditProjectForm = async (req, res) => {

@@ -3,7 +3,6 @@ import path from 'path';
 import express from 'express';
 import session from 'express-session';
 import flash from './src/middleware/flash.js';
-import { setDefaultAutoSelectFamily } from 'net';
 import { testConnection } from './src/models/db.js';
 import router from './src/controllers/routes.js';
 
@@ -12,11 +11,18 @@ const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 
 // Define the port number the server will listen on
 const PORT = process.env.PORT || 3000;
+const SESSION_SECRET =
+  process.env.SESSION_SECRET ||
+  'development-only-secret-change-me';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+if (NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
 
 /**
  * Configure Express middleware
@@ -25,10 +31,16 @@ const app = express();
 // Set up session management
 app.use(
   session({
-    secret: 'your-secret-key',
+    secret: SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
-    cookie: { maxAge: 60 * 60 * 1000 }, // Session expires after 1 hour of inactivity
+    saveUninitialized: false,
+    name: 'service-network.sid',
+    cookie: {
+      maxAge: 60 * 60 * 1000,
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: NODE_ENV === 'production',
+    }, // Session expires after 1 hour of inactivity
   }),
 );
 
@@ -47,7 +59,6 @@ app.set('view engine', 'ejs');
 
 // Tell Express where to find your templates
 app.set('views', path.join(__dirname, 'src/views'));
-setDefaultAutoSelectFamily;
 
 // Middleware to log all incoming requests
 app.use((req, res, next) => {
@@ -97,7 +108,7 @@ app.use((err, req, res, next) => {
   const context = {
     title: status === 404 ? 'Page Not Found' : 'Server Error',
     error: err.message,
-    stack: err.stack,
+    stack: NODE_ENV === 'development' ? err.stack : null,
     path: req.path,
   };
 

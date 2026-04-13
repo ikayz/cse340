@@ -7,25 +7,40 @@ import { createOrganization } from '../models/organization.js';
 import { getProjectsByOrganizationId } from '../models/projects.js';
 import { body, validationResult } from 'express-validator';
 
-const showOrganizationsPage = async (req, res) => {
-  const organizations = await getAllOrganizations();
-  const title = 'Our Partner Organizations';
+const showOrganizationsPage = async (req, res, next) => {
+  try {
+    const organizations = await getAllOrganizations();
+    const title = 'Our Partner Organizations';
 
-  res.render('organizations', { title, organizations, path: req.path });
+    res.render('organizations', { title, organizations, path: req.path });
+  } catch (error) {
+    next(error);
+  }
 };
 
-const showOrganizationDetailsPage = async (req, res) => {
-  const organizationId = req.params.id;
-  const organizationDetails = await getOrganizationDetails(organizationId);
-  const projects = await getProjectsByOrganizationId(organizationId);
-  const title = 'Organization Details';
+const showOrganizationDetailsPage = async (req, res, next) => {
+  try {
+    const organizationId = req.params.id;
+    const organizationDetails = await getOrganizationDetails(organizationId);
 
-  res.render('organization', {
-    title,
-    organizationDetails,
-    projects,
-    path: req.path,
-  });
+    if (!organizationDetails) {
+      const err = new Error('Organization Not Found');
+      err.status = 404;
+      return next(err);
+    }
+
+    const projects = await getProjectsByOrganizationId(organizationId);
+    const title = 'Organization Details';
+
+    return res.render('organization', {
+      title,
+      organizationDetails,
+      projects,
+      path: req.path,
+    });
+  } catch (error) {
+    return next(error);
+  }
 };
 
 const showNewOrganizationForm = async (req, res) => {
@@ -49,13 +64,21 @@ const processNewOrganizationForm = async (req, res) => {
   const { name, description, contactEmail } = req.body;
   const logoFilename = 'placeholder-logo.png'; // Use the placeholder logo for all new organizations
 
-  const organizationId = await createOrganization(
-    name,
-    description,
-    contactEmail,
-    logoFilename,
-  );
-  res.redirect(`/organization/${organizationId}`);
+  try {
+    const organizationId = await createOrganization(
+      name,
+      description,
+      contactEmail,
+      logoFilename,
+    );
+
+    req.flash('success', 'Organization created successfully');
+    return res.redirect(`/organization/${organizationId}`);
+  } catch (error) {
+    console.error('Error creating organization:', error);
+    req.flash('error', 'Failed to create organization');
+    return res.redirect('/new-organization');
+  }
 };
 
 // Define validation and sanitization rules for organization form
@@ -81,12 +104,22 @@ const organizationValidation = [
     .withMessage('Please provide a valid email address'),
 ];
 
-const showEditOrganizationForm = async (req, res) => {
-  const organizationId = req.params.id;
-  const organizationDetails = await getOrganizationDetails(organizationId);
+const showEditOrganizationForm = async (req, res, next) => {
+  try {
+    const organizationId = req.params.id;
+    const organizationDetails = await getOrganizationDetails(organizationId);
 
-  const title = 'Edit Organization';
-  res.render('edit-organization', { title, organizationDetails, path: req.path });
+    if (!organizationDetails) {
+      const err = new Error('Organization Not Found');
+      err.status = 404;
+      return next(err);
+    }
+
+    const title = 'Edit Organization';
+    return res.render('edit-organization', { title, organizationDetails, path: req.path });
+  } catch (error) {
+    return next(error);
+  }
 };
 
 const processEditOrganizationForm = async (req, res) => {
@@ -106,11 +139,17 @@ const processEditOrganizationForm = async (req, res) => {
 
   const { name, description, contactEmail, logoFilename } = req.body;
 
-  await updateOrganization(organizationId, name, description, contactEmail, logoFilename);
+  try {
+    await updateOrganization(organizationId, name, description, contactEmail, logoFilename);
 
-  req.flash('success', 'Organization updated successfully');
+    req.flash('success', 'Organization updated successfully');
 
-  res.redirect(`/organization/${organizationId}`);
+    return res.redirect(`/organization/${organizationId}`);
+  } catch (error) {
+    console.error('Error updating organization:', error);
+    req.flash('error', 'Failed to update organization');
+    return res.redirect(`/edit-organization/${organizationId}`);
+  }
 };
 
 export {
